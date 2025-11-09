@@ -1,0 +1,6 @@
+{{ doc  | name: "<< name: input_powerpoint.pptx >>" }}
+{{ contextLoop  | tokens: "2000" | overlap: "0" }}
+{{ LLM  | prompt: "You are transcribing a PowerPoint presentation. Extract the exact text from each slide and label it as 'Slide {n}' where {n} is the slide number. ONLY TRANSCRIBE SLIDES Maintain the exact flow and structure of the slide text. If there are images that cannot be transcribed, provide a brief summary of what the image is depicting. Here is the content of the slide:\n<< name: snippet, prompt: false >>" | cache: "true" | maxTokens: "6000" }}=>{{ variable  | name: "transcription" | mode: "append" }}
+{{ endLoop  }}
+<< name: transcription, prompt: false >>
+{{ createFile  | file: "transcript.txt" }}

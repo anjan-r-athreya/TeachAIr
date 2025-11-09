@@ -1,0 +1,11 @@
+{{ variableLoop  | variable: "<< name: resultslink, prompt: false >>" | loopType: "array-strings" }}
+<< name: loopValue, prompt: false >>=>{{ truncateToken  | tokens: "15" }}=>{{ LLM  | prompt: "Look for the word, \"Category:\", output only the word after it." | cache: "true" | modelCard: "llama-3-2-90b-vision-instruct-bedrock" }}=>{{ variable  | name: "name" }}
+<< name: loopValue, prompt: false >>=>{{ jsonEscape  }}=>{{ variable  | name: "snippet" }}
+{{ elastic  | operation: "index" | payload: "{
+  'index': 'neuralseekgtm_v2',
+  'document': {
+    'name': \"<< name: name, prompt: false >>\",
+    'text': \"<< name: snippet, prompt: false >>\"
+  }
+}" }}
+{{ endLoop  }}

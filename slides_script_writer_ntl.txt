@@ -1,0 +1,6 @@
+{{ doc  | name: "transcript.txt" }}=>{{ variable  | name: "slidesText" | mode: "append" }}
+{{ contextLoop  | tokens: "1000" | overlap: "0" }}
+<< name: slidesText, prompt: false >>=>{{ LLM  | prompt: "You are a professor tasked with creating a script for a lecture based on the following slide text. Your goal is to make the content simple, easy to understand, and ensure all concepts are well taught. Use clear and to the point language, and provide explanations that are accessible to students of all levels, these explanations should be medium sized in length. IMPORTANT: To provide more value to your teachings, you should incorporate outside teachings related to each slide's content, do NOT just read off the slides. IMPORTANT: you should define every extraneous term in the slides. Examples include temrs like \"hyperparameters\" and \"black box\"\n\nHere is the slide text:\n" | cache: "true" | maxTokens: "6000" }}=>{{ variable  | name: "professorScript" | mode: "append" }}
+{{ endLoop  }}
+<< name: professorScript, prompt: false >>
+{{ createFile  | file: "professorScript.txt" }}
